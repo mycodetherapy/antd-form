@@ -1,0 +1,38 @@
+.form-wrap {
+  max-width: 500px;
+  margin: 0 auto;
+}
+.form {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.form .ant-form-item {
+  margin-bottom: 2px;
+}
+
+.form-row .ant-form-item-control-input-content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 20px;
+}
+
+.form:where(.ant-form-vertical)
+  .ant-form-item:not(.ant-form-item-horizontal)
+  .ant-form-item-row {
+  flex-direction: row !important;
+}
+
+.form-field {
+  width: 100%;
+}
+
+.form-field .ant-input-number,
+.form-field .ant-picker {
+  flex-grow: 1;
+  width: 100%;
+}
+
+.button-wrap {
+  margin-top: 16px;
+}

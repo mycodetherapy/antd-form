@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './styles.css';
 import {
   Form,
   Input,
@@ -8,6 +9,7 @@ import {
   InputNumber,
   message,
   Row,
+  Card,
 } from 'antd';
 import { FormInstance } from 'antd/es/form';
 import moment from 'moment';
@@ -70,23 +72,25 @@ const AdForm: React.FC = () => {
   };
 
   return (
-    <>
+    <Card className='form-wrap'>
       <Form
         form={form}
         initialValues={initialValues}
         layout='vertical'
         disabled={!editing}
-        style={{ maxWidth: 600, margin: '0 auto' }}
+        className='form'
       >
-        <Form.Item
-          label='ФИО'
-          name='fullName'
-          rules={[{ required: true, message: 'Пожалуйста, введите ФИО' }]}
-        >
-          <Input />
+        <Form.Item>
+          <Form.Item
+            label='ФИО'
+            name='fullName'
+            rules={[{ required: true, message: 'Пожалуйста, введите ФИО' }]}
+          >
+            <Input />
+          </Form.Item>
         </Form.Item>
 
-        <Form.Item style={{ marginBottom: 0 }}>
+        <Form.Item className='form-row'>
           <Form.Item
             label='Дата рождения'
             name='birthDate'
@@ -102,7 +106,7 @@ const AdForm: React.FC = () => {
                     : Promise.resolve(),
               },
             ]}
-            style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+            className='form-field'
           >
             <DatePicker format='DD.MM.YYYY' />
           </Form.Item>
@@ -130,35 +134,33 @@ const AdForm: React.FC = () => {
                 },
               }),
             ]}
-            style={{
-              display: 'inline-block',
-              width: 'calc(50% - 8px)',
-              margin: '0 8px',
-            }}
+            className='form-field'
           >
             <InputNumber min={0} max={100} />
           </Form.Item>
         </Form.Item>
 
-        <Form.Item
-          label='Должность'
-          name='position'
-          rules={[
-            { required: true, message: 'Пожалуйста, выберите должность' },
-          ]}
-        >
-          <Select>
-            <Option value='Директор'>Директор</Option>
-            <Option value='Менеджер по работе с клиентами'>
-              Менеджер по работе с клиентами
-            </Option>
-            <Option value='Специалист тех. поддержки'>
-              Специалист тех. поддержки
-            </Option>
-          </Select>
+        <Form.Item>
+          <Form.Item
+            label='Должность'
+            name='position'
+            rules={[
+              { required: true, message: 'Пожалуйста, выберите должность' },
+            ]}
+          >
+            <Select>
+              <Option value='Директор'>Директор</Option>
+              <Option value='Менеджер по работе с клиентами'>
+                Менеджер по работе с клиентами
+              </Option>
+              <Option value='Специалист тех. поддержки'>
+                Специалист тех. поддержки
+              </Option>
+            </Select>
+          </Form.Item>
         </Form.Item>
 
-        <Form.Item style={{ marginBottom: 0 }}>
+        <Form.Item className='form-row'>
           <Form.Item
             label='Логин'
             name='username'
@@ -170,7 +172,7 @@ const AdForm: React.FC = () => {
                 message: 'Логин должен содержать максимум 20 символов',
               },
             ]}
-            style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+            className='form-field'
           >
             <Input />
           </Form.Item>
@@ -184,17 +186,13 @@ const AdForm: React.FC = () => {
                 message: 'Пароль должен содержать максимум 12 символов',
               },
             ]}
-            style={{
-              display: 'inline-block',
-              width: 'calc(50% - 8px)',
-              margin: '0 8px',
-            }}
+            className='form-field'
           >
             <Input.Password />
           </Form.Item>
         </Form.Item>
 
-        <Form.Item style={{ marginBottom: 0 }}>
+        <Form.Item className='form-row'>
           <Form.Item
             label='Email'
             name='email'
@@ -202,18 +200,14 @@ const AdForm: React.FC = () => {
               { required: true, message: 'Пожалуйста, введите email' },
               { type: 'email', message: 'Некорректный формат email' },
             ]}
-            style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+            className='form-field'
           >
             <Input />
           </Form.Item>
           <Form.Item
             label='Номер телефона'
             name='phoneNumber'
-            style={{
-              display: 'inline-block',
-              width: 'calc(50% - 8px)',
-              margin: '0 8px',
-            }}
+            className='form-field'
           >
             <Input />
           </Form.Item>
@@ -232,20 +226,22 @@ const AdForm: React.FC = () => {
           <TextArea rows={4} />
         </Form.Item>
       </Form>
-      {!editing ? (
-        <Button type='primary' onClick={toggleEdit}>
-          Изменить
-        </Button>
-      ) : (
-        <>
-          <Button type='primary' onClick={onSave}>
-            Сохранить
+      <Row className='button-wrap'>
+        {!editing ? (
+          <Button type='primary' onClick={toggleEdit}>
+            Изменить
           </Button>
+        ) : (
+          <>
+            <Button type='primary' onClick={onSave}>
+              Сохранить
+            </Button>
 
-          <Button onClick={onCancel}>Отмена</Button>
-        </>
-      )}
-    </>
+            <Button onClick={onCancel}>Отмена</Button>
+          </>
+        )}
+      </Row>
+    </Card>
   );
 };
 

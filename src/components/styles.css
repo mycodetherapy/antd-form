@@ -3,7 +3,7 @@
   margin: 0 auto;
 }
 .form {
-  max-width: 600px;
+  max-width: 100%;
   margin: 0 auto;
 }
 .form .ant-form-item {
@@ -15,12 +15,6 @@
   justify-content: space-between;
   width: 100%;
   gap: 20px;
-}
-
-.form:where(.ant-form-vertical)
-  .ant-form-item:not(.ant-form-item-horizontal)
-  .ant-form-item-row {
-  flex-direction: row !important;
 }
 
 .form-field {

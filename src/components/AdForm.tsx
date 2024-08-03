@@ -12,8 +12,15 @@ import {
   Card,
 } from 'antd';
 import { FormInstance } from 'antd/es/form';
-import 'moment/locale/ru';
 import dayjs from 'dayjs';
+import {
+  birthDateRule,
+  emailRule,
+  experienceRule,
+  maxLengthRule,
+  minLengthRule,
+  requiredRule,
+} from '../validationRules';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -77,13 +84,14 @@ const AdForm: React.FC = () => {
         initialValues={lastSavedValues}
         layout='vertical'
         disabled={!editing}
+        requiredMark={false}
         className='form'
       >
         <Form.Item>
           <Form.Item
             label='ФИО'
             name='fullName'
-            rules={[{ required: true, message: 'Пожалуйста, введите ФИО' }]}
+            rules={[requiredRule('Пожалуйста, введите ФИО')]}
           >
             <Input />
           </Form.Item>
@@ -93,18 +101,7 @@ const AdForm: React.FC = () => {
           <Form.Item
             label='Дата рождения'
             name='birthDate'
-            rules={[
-              {
-                required: true,
-                message: 'Пожалуйста, выберите дату рождения',
-              },
-              {
-                validator: (_, value) =>
-                  value && value.isBefore(dayjs().subtract(130, 'years'))
-                    ? Promise.reject('Некорректная дата рождения')
-                    : Promise.resolve(),
-              },
-            ]}
+            rules={[birthDateRule]}
             className='form-field'
           >
             <DatePicker
@@ -115,41 +112,15 @@ const AdForm: React.FC = () => {
           <Form.Item
             label='Стаж (лет)'
             name='experience'
-            rules={[
-              {
-                type: 'number',
-                max: 100,
-                message: 'Стаж не может быть больше 100 лет',
-              },
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  const birthDate = getFieldValue('birthDate');
-                  if (birthDate && value !== undefined) {
-                    const age = dayjs().diff(dayjs(birthDate), 'year');
-                    if (value > age) {
-                      return Promise.reject(
-                        new Error('Стаж не может быть больше возраста')
-                      );
-                    }
-                  }
-                  return Promise.resolve();
-                },
-              }),
-            ]}
+            rules={[experienceRule(form.getFieldValue)]}
             className='form-field'
           >
-            <InputNumber min={0} max={100} />
+            <InputNumber min={0} />
           </Form.Item>
         </Form.Item>
 
         <Form.Item>
-          <Form.Item
-            label='Должность'
-            name='position'
-            rules={[
-              { required: true, message: 'Пожалуйста, выберите должность' },
-            ]}
-          >
+          <Form.Item label='Должность' name='position'>
             <Select>
               <Option value='Директор'>Директор</Option>
               <Option value='Менеджер по работе с клиентами'>
@@ -167,12 +138,9 @@ const AdForm: React.FC = () => {
             label='Логин'
             name='username'
             rules={[
-              { required: true, message: 'Пожалуйста, введите логин' },
-              { min: 3, message: 'Логин должен содержать минимум 3 символа' },
-              {
-                max: 20,
-                message: 'Логин должен содержать максимум 20 символов',
-              },
+              requiredRule('Пожалуйста, введите логин'),
+              minLengthRule(3, 'Логин должен содержать минимум 3 символа'),
+              maxLengthRule(20, 'Логин должен содержать максимум 20 символов'),
             ]}
             className='form-field'
           >
@@ -182,11 +150,8 @@ const AdForm: React.FC = () => {
             label='Пароль'
             name='password'
             rules={[
-              { min: 6, message: 'Пароль должен содержать минимум 6 символов' },
-              {
-                max: 12,
-                message: 'Пароль должен содержать максимум 12 символов',
-              },
+              minLengthRule(6, 'Пароль должен содержать минимум 6 символов'),
+              maxLengthRule(12, 'Пароль должен содержать максимум 12 символов'),
             ]}
             className='form-field'
           >
@@ -198,10 +163,7 @@ const AdForm: React.FC = () => {
           <Form.Item
             label='Email'
             name='email'
-            rules={[
-              { required: true, message: 'Пожалуйста, введите email' },
-              { type: 'email', message: 'Некорректный формат email' },
-            ]}
+            rules={[requiredRule('Пожалуйста, введите email'), emailRule]}
             className='form-field'
           >
             <Input />
@@ -219,10 +181,10 @@ const AdForm: React.FC = () => {
           label='Примечание'
           name='notes'
           rules={[
-            {
-              max: 400,
-              message: 'Примечание не может содержать больше 400 символов',
-            },
+            maxLengthRule(
+              400,
+              'Примечание не может содержать больше 400 символов'
+            ),
           ]}
         >
           <TextArea rows={4} />
@@ -238,7 +200,6 @@ const AdForm: React.FC = () => {
             <Button type='primary' onClick={onSave}>
               Сохранить
             </Button>
-
             <Button onClick={onCancel}>Отмена</Button>
           </>
         )}

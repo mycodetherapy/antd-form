@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './styles.css';
 import {
   Form,
@@ -12,16 +12,16 @@ import {
   Card,
 } from 'antd';
 import { FormInstance } from 'antd/es/form';
-import moment from 'moment';
 import 'moment/locale/ru';
+import dayjs from 'dayjs';
 
 const { TextArea } = Input;
 const { Option } = Select;
 
 interface FormValues {
   fullName: string;
-  birthDate: moment.Moment;
-  experience?: number;
+  birthDate: dayjs.Dayjs;
+  experience?: number | null;
   position: string;
   username: string;
   password?: string;
@@ -35,7 +35,7 @@ const AdForm: React.FC = () => {
   const [editing, setEditing] = useState<boolean>(false);
   const [lastSavedValues, setLastSavedValues] = useState({
     fullName: 'Иванов Иван Иванович',
-    birthDate: moment('1990-01-01'),
+    birthDate: dayjs('1990-01-01'),
     experience: 10,
     position: 'Менеджер по работе с клиентами',
     username: 'ivanov',
@@ -100,14 +100,17 @@ const AdForm: React.FC = () => {
               },
               {
                 validator: (_, value) =>
-                  value && value.isBefore(moment().subtract(130, 'years'))
+                  value && value.isBefore(dayjs().subtract(130, 'years'))
                     ? Promise.reject('Некорректная дата рождения')
                     : Promise.resolve(),
               },
             ]}
             className='form-field'
           >
-            <DatePicker format='DD.MM.YYYY' />
+            <DatePicker
+              format='DD.MM.YYYY'
+              onChange={() => form.validateFields(['experience'])}
+            />
           </Form.Item>
           <Form.Item
             label='Стаж (лет)'
@@ -122,7 +125,7 @@ const AdForm: React.FC = () => {
                 validator(_, value) {
                   const birthDate = getFieldValue('birthDate');
                   if (birthDate && value !== undefined) {
-                    const age = moment().diff(birthDate, 'years');
+                    const age = dayjs().diff(dayjs(birthDate), 'year');
                     if (value > age) {
                       return Promise.reject(
                         new Error('Стаж не может быть больше возраста')

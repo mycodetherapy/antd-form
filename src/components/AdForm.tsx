@@ -20,31 +20,30 @@ const { Option } = Select;
 
 interface FormValues {
   fullName: string;
-  birthDate: moment.Moment | null;
-  experience: number | null;
+  birthDate: moment.Moment;
+  experience?: number;
   position: string;
   username: string;
   password?: string;
   email: string;
-  phoneNumber?: string;
+  phoneNumber: string;
   notes?: string;
 }
 
 const AdForm: React.FC = () => {
   const [form] = Form.useForm<FormInstance<FormValues>>();
-  const [editing, setEditing] = useState(false);
-
-  const initialValues: FormValues = {
-    fullName: 'Иван Иванов',
+  const [editing, setEditing] = useState<boolean>(false);
+  const [lastSavedValues, setLastSavedValues] = useState({
+    fullName: 'Иванов Иван Иванович',
     birthDate: moment('1990-01-01'),
     experience: 10,
     position: 'Менеджер по работе с клиентами',
     username: 'ivanov',
     password: '',
     email: 'ivanov@example.com',
-    phoneNumber: '1234567890',
+    phoneNumber: '+7 777 777 77 77',
     notes: 'Это примечание.',
-  };
+  });
 
   const toggleEdit = () => {
     if (editing) {
@@ -56,8 +55,8 @@ const AdForm: React.FC = () => {
   const onSave = () => {
     form
       .validateFields()
-      .then((values) => {
-        console.log('Saved values:', values);
+      .then((values: any) => {
+        setLastSavedValues(values);
         setEditing(false);
         message.success('Данные сохранены!');
       })
@@ -67,7 +66,7 @@ const AdForm: React.FC = () => {
   };
 
   const onCancel = () => {
-    form.setFieldsValue({});
+    form.resetFields();
     setEditing(false);
   };
 
@@ -75,7 +74,7 @@ const AdForm: React.FC = () => {
     <Card className='form-wrap'>
       <Form
         form={form}
-        initialValues={initialValues}
+        initialValues={lastSavedValues}
         layout='vertical'
         disabled={!editing}
         className='form'

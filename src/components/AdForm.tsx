@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './styles.css';
 import {
   Form,
@@ -12,7 +12,6 @@ import {
   Card,
 } from 'antd';
 import { FormInstance } from 'antd/es/form';
-import dayjs from 'dayjs';
 import {
   birthDateRule,
   emailRule,
@@ -21,36 +20,16 @@ import {
   minLengthRule,
   requiredRule,
 } from '../validationRules';
+import { FormValues } from '../types';
+import { INIT_VALUES, POSITIONS } from '../constants';
 
 const { TextArea } = Input;
 const { Option } = Select;
 
-interface FormValues {
-  fullName: string;
-  birthDate: dayjs.Dayjs;
-  experience?: number | null;
-  position: string;
-  username: string;
-  password?: string;
-  email: string;
-  phoneNumber: string;
-  notes?: string;
-}
-
 const AdForm: React.FC = () => {
   const [form] = Form.useForm<FormInstance<FormValues>>();
   const [editing, setEditing] = useState<boolean>(false);
-  const [lastSavedValues, setLastSavedValues] = useState({
-    fullName: 'Иванов Иван Иванович',
-    birthDate: dayjs('1990-01-01'),
-    experience: 10,
-    position: 'Менеджер по работе с клиентами',
-    username: 'ivanov',
-    password: '',
-    email: 'ivanov@example.com',
-    phoneNumber: '+7 777 777 77 77',
-    notes: 'Это примечание.',
-  });
+  const [lastSavedValues, setLastSavedValues] = useState(INIT_VALUES);
 
   const toggleEdit = () => {
     if (editing) {
@@ -122,13 +101,11 @@ const AdForm: React.FC = () => {
         <Form.Item>
           <Form.Item label='Должность' name='position'>
             <Select>
-              <Option value='Директор'>Директор</Option>
-              <Option value='Менеджер по работе с клиентами'>
-                Менеджер по работе с клиентами
-              </Option>
-              <Option value='Специалист тех. поддержки'>
-                Специалист тех. поддержки
-              </Option>
+              {POSITIONS.map((position) => (
+                <Option key={position} value={position}>
+                  {position}
+                </Option>
+              ))}
             </Select>
           </Form.Item>
         </Form.Item>

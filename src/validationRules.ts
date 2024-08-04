@@ -31,7 +31,7 @@ export const experienceRule = (
   getFieldValue: (field: string) => any
 ): Rule => ({
   validator(_, value) {
-    if (value !== undefined) {
+    if (value) {
       if (value > 100) {
         return Promise.reject(new Error('Стаж не может быть больше 100 лет'));
       }

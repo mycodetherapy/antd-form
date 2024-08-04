@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './styles.css';
+import dayjs from 'dayjs';
 import {
   Form,
   Input,
@@ -23,6 +24,7 @@ import {
 } from '../validationRules';
 import { FormValues } from '../types';
 import { INIT_VALUES, POSITIONS } from '../constants';
+import { mapServerDataToFormValues } from '../utils';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -30,7 +32,9 @@ const { Option } = Select;
 const AdForm: React.FC = () => {
   const [form] = Form.useForm<FormInstance<FormValues>>();
   const [editing, setEditing] = useState<boolean>(false);
-  const [lastSavedValues, setLastSavedValues] = useState(INIT_VALUES);
+  const [lastSavedValues, setLastSavedValues] = useState(
+    mapServerDataToFormValues(INIT_VALUES)
+  );
 
   const toggleEdit = () => {
     if (editing) {
@@ -43,12 +47,16 @@ const AdForm: React.FC = () => {
     form
       .validateFields()
       .then((values: any) => {
-        setLastSavedValues(values);
+        const transformedValues = {
+          ...values,
+          birthDate: values.birthDate.toDate(),
+        };
+        setLastSavedValues(transformedValues);
         setEditing(false);
         message.success('Данные сохранены!');
       })
-      .catch((errorInfo) => {
-        console.log('Ошибка сохранения:', errorInfo);
+      .catch((error) => {
+        console.log('Ошибка сохранения:', error);
       });
   };
 
@@ -61,7 +69,10 @@ const AdForm: React.FC = () => {
     <Card className='form-wrap'>
       <Form
         form={form}
-        initialValues={lastSavedValues}
+        initialValues={{
+          ...lastSavedValues,
+          birthDate: dayjs(lastSavedValues.birthDate),
+        }}
         layout='vertical'
         disabled={!editing}
         requiredMark={false}

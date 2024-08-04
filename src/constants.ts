@@ -1,8 +1,6 @@
-import dayjs from 'dayjs';
-
 export const INIT_VALUES = {
   fullName: 'Иванов Иван Иванович',
-  birthDate: dayjs('1990-01-01'),
+  birthDate: new Date('1990-01-01'),
   experience: 10,
   position: 'Менеджер по работе с клиентами',
   username: 'ivanov',

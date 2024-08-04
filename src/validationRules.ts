@@ -1,5 +1,6 @@
 import { Rule } from 'antd/es/form';
 import dayjs from 'dayjs';
+import { PHONE_NUMBER_PATTERN } from './constants';
 
 export const requiredRule = (message: string): Rule => ({
   required: true,
@@ -43,6 +44,19 @@ export const experienceRule = (
           );
         }
       }
+    }
+    return Promise.resolve();
+  },
+});
+
+export const phoneNumberRule = (): Rule => ({
+  validator(_, value) {
+    if (value && !PHONE_NUMBER_PATTERN.test(value)) {
+      return Promise.reject(
+        new Error(
+          'Номер телефона должен быть в формате +7 777 777 77 77 или других допустимых форматов.'
+        )
+      );
     }
     return Promise.resolve();
   },

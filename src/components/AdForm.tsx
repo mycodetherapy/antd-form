@@ -18,6 +18,7 @@ import {
   experienceRule,
   maxLengthRule,
   minLengthRule,
+  phoneNumberRule,
   requiredRule,
 } from '../validationRules';
 import { FormValues } from '../types';
@@ -149,6 +150,7 @@ const AdForm: React.FC = () => {
             label='Номер телефона'
             name='phoneNumber'
             className='form-field'
+            rules={[phoneNumberRule()]}
           >
             <Input />
           </Form.Item>

@@ -17,3 +17,6 @@ export const POSITIONS = [
   'Специалист тех. поддержки',
   'Директор',
 ];
+
+export const PHONE_NUMBER_PATTERN =
+  /^(?:\+7[\s-]?)?(?:\d{3}[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}|\d{3}[\s-]?\d{3}[\s-]?\d{4}|\d{11})$/;

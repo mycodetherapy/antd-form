@@ -98,6 +98,9 @@ const AdForm: React.FC = () => {
             <DatePicker
               format='DD.MM.YYYY'
               onChange={() => form.validateFields(['experience'])}
+              disabledDate={(current) => {
+                return current && current > dayjs().endOf('day');
+              }}
             />
           </Form.Item>
           <Form.Item

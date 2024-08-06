@@ -49,7 +49,10 @@ const AdForm: React.FC = () => {
       .then((values: any) => {
         const transformedValues = {
           ...values,
+          fullName: values.fullName.trim(),
           birthDate: values.birthDate.toDate(),
+          phoneNumber: values.phoneNumber.trim(),
+          notes: values.notes ? values.notes.trim() : undefined,
         };
         setLastSavedValues(transformedValues);
         setEditing(false);
@@ -135,6 +138,7 @@ const AdForm: React.FC = () => {
               minLengthRule(3, 'Логин должен содержать минимум 3 символа'),
               maxLengthRule(20, 'Логин должен содержать максимум 20 символов'),
             ]}
+            normalize={(value: string) => value.trim()}
             className='form-field'
           >
             <Input />
@@ -146,6 +150,7 @@ const AdForm: React.FC = () => {
               minLengthRule(6, 'Пароль должен содержать минимум 6 символов'),
               maxLengthRule(12, 'Пароль должен содержать максимум 12 символов'),
             ]}
+            normalize={(value: string) => value.trim()}
             className='form-field'
           >
             <Input.Password />
@@ -157,6 +162,7 @@ const AdForm: React.FC = () => {
             label='Email'
             name='email'
             rules={[requiredRule('Пожалуйста, введите email'), emailRule]}
+            normalize={(value: string) => value.trim()}
             className='form-field'
           >
             <Input />
@@ -164,8 +170,8 @@ const AdForm: React.FC = () => {
           <Form.Item
             label='Номер телефона'
             name='phoneNumber'
-            className='form-field'
             rules={[phoneNumberRule()]}
+            className='form-field'
           >
             <Input />
           </Form.Item>

@@ -93,6 +93,7 @@ const AdForm: React.FC = () => {
             label='Дата рождения'
             name='birthDate'
             rules={[birthDateRule]}
+            dependencies={['experience']}
             className='form-field'
           >
             <DatePicker

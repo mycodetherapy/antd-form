@@ -35,14 +35,15 @@ export const experienceRule = (
       if (value > 100) {
         return Promise.reject(new Error('Стаж не может быть больше 100 лет'));
       }
+      const errorText = 'Стаж не может быть больше возраста';
       const birthDate = getFieldValue('birthDate');
-      if (birthDate) {
-        const age = dayjs().diff(dayjs(birthDate), 'year');
-        if (value > age) {
-          return Promise.reject(
-            new Error('Стаж не может быть больше возраста')
-          );
-        }
+      if (!birthDate) {
+        return Promise.reject(new Error(errorText));
+      }
+
+      const age = dayjs().diff(dayjs(birthDate), 'year');
+      if (value > age) {
+        return Promise.reject(new Error(errorText));
       }
     }
     return Promise.resolve();

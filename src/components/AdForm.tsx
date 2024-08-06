@@ -97,7 +97,6 @@ const AdForm: React.FC = () => {
           >
             <DatePicker
               format='DD.MM.YYYY'
-              onChange={() => form.validateFields(['experience'])}
               disabledDate={(current) => {
                 return current && current > dayjs().endOf('day');
               }}
@@ -107,6 +106,7 @@ const AdForm: React.FC = () => {
             label='Стаж (лет)'
             name='experience'
             rules={[experienceRule(form.getFieldValue)]}
+            dependencies={['birthDate']}
             className='form-field'
           >
             <InputNumber min={0} />
